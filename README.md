@@ -59,7 +59,7 @@ A clean and consistent dataset is now ready for further analysis, visualization,
 ## 👤 Author
 
 - Akeira Green
-- @akeiragreen
+- [@akeiragreen](https://github.com/akeiragreen)
 
 ---
 
