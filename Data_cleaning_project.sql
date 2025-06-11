@@ -1,4 +1,5 @@
--- Data Cleaning Project
+--            Data Cleaning Project
+
 -- 1. remove duplicates
 -- 2. standardize data 
 -- 3. null vales or blank vales
@@ -12,15 +13,28 @@ CREATE TABLE layoffs_stagging
 LIKE layoffs;
 
 SELECT * 
-FROM layoflayoffs_staggingfs_stagging;
+FROM layoflayoffs_stagging;
 
+-- Inserting all records into the staging table
 INSERT layoffs_stagging
 SELECT *
 FROM layoffs;
 
 
+
+-- SQL Logic Summary: Created a staging table (layoffs_stagging) to preserve the original dataset.
+--      Used ROW_NUMBER() with PARTITION BY on relevant columns to detect duplicates.
+--      Inserted records with row numbers into a new table (layoffs_stagging2).
+--      Deleted all rows with row_num > 1, keeping only one record per duplicate group.
+
+-- Insights for Stakeholders: Data accuracy improved: All duplicate layoff records have been systematically removed, ensuring accurate headcount analysis.
+--     More reliable reporting: Clean data prevents inflated figures that could mislead trend or impact assessments.
+
+
+
+
 -- ---------------------------------------------------------------------------------------------------------------------
--- REMOVE DUPLICATES
+-- Duplicate Records Removal
 
 SELECT *,
 ROW_NUMBER() OVER( 
@@ -28,8 +42,7 @@ PARTITION BY company,industry, total_laid_off, percentage_laid_off,`date` ) AS r
 FROM layoffs_stagging;
 
 
--- Note : i have now numbered all the duplicates as 2
--- Insight: i use ROW_NUMBER() OVER(PARTITION BY) because 
+-- Note : Identifying duplicate rows based on all relevant columns
 
 
 WITH dupilicates_CTE AS 
@@ -46,8 +59,8 @@ FROM dupilicates_CTE
 WHERE row_num > 1;
 
 
--- Note: All the duplicates have retured because their labled as # 2 which is greater then 1
--- Insight : i use CTE 
+-- Insight : i use CTE to Select duplicate records 
+-- Note: All the duplicates have retured because their labled as # 2 
 
 
 CREATE TABLE `layoffs_stagging2` (
@@ -63,7 +76,8 @@ CREATE TABLE `layoffs_stagging2` (
   `row_num` int
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Note : i created a new table ,then added `row_num` column to the `layoffs_stagging2` to count all the duplicates as 2 ad be able to delete all duplicates
+-- Note : Creating a new table with an additional 'row_num' column to manage duplicates
+
 
 
 SELECT *
@@ -83,8 +97,15 @@ FROM layoffs_stagging2
 WHERE row_num >1;
 
 
--- Note: All Duplicates have now been deleted
--- Insight: I used ROW_NUMBER() OVER( PARTITION BY ) 
+-- SQL Logic Summary: Created a staging table (layoffs_stagging) to preserve the original dataset.
+--       Used ROW_NUMBER() with PARTITION BY on relevant columns to detect duplicates.
+--       Inserted records with row numbers into a new table (layoffs_stagging2).
+--       Deleted all rows with row_num > 1, keeping only one record per duplicate group.
+
+-- Insights for Stakeholders:Data accuracy improved: All duplicate layoff records have been systematically removed, ensuring accurate headcount analysis.
+--       More reliable reporting: Clean data prevents inflated figures that could mislead trend or impact assessments.
+
+
 
 
 
@@ -102,8 +123,7 @@ FROM layoffs_stagging2;
 UPDATE layoffs_stagging2
 SET company = TRIM(company);
 	
--- Note: The company name column had companies names all over the row mix-matched instead of uniformly correct
--- Insight: I use TRIM() to 
+-- Note: Removing leading and trailing spaces from company names
 
 
 SELECT *
@@ -114,7 +134,7 @@ UPDATE layoffs_stagging2
 SET industry = 'Crypto'
 WHERE industry like 'crypto%';
 
--- Note : Not all `crypto` was spelled the same so i updated them all to match
+-- Note :Standardizing industry names (e.g., various forms of "crypto")
 
 SELECT DISTINCT country, TRIM(TRAILING '.' FROM country)
 FROM layoffs_stagging2
@@ -124,8 +144,7 @@ UPDATE layoffs_stagging2
 SET country = TRIM(TRAILING '.' FROM country)
 WHERE country LIKE 'United States%' ;
 
--- Note: Now the single '.' is deleted from the end of 'United States' and all look uniforlly the same
--- Insight: I use TRIM(TRAILING) for removing the '.' at the end of 'United States'
+-- Note: Standardizing country names (removing trailing punctuation)
 
 
 SELECT `date`,
@@ -138,8 +157,21 @@ SET `date` = str_to_date(`date`, '%m/%d/%Y');
 ALTER TABLE layoffs_stagging2
 MODIFY COLUMN `date` DATE;
 
--- Note : i changed the `date` column from text to date format so ill have better query resuts
--- Insight: I use str_to_date() to turn the date into correct Month date and year format
+-- Note :  Converting date from string to proper DATE format
+-- Note: Changing the data type of the date column to DATE
+-- Insight:Used TRIM() and STR_TO_DATE() functions to clean and normalize text fields and properly format dates for improved querying and consistency.
+
+
+
+-- SQL Logic Summary: Trimmed leading/trailing spaces in the company field.
+--      Standardized inconsistent industry labels like "crypto" → "Crypto".
+--      Removed punctuation from country names (e.g., "United States.").
+--      Converted date column from text to SQL DATE format for proper time-based analysis.
+-- Insights for Stakeholders: Improved consistency across company, industry, and location fields ensures cleaner segmentation and filtering.
+--      Time-series readiness: Standard date format allows for chronological insights and trend analysis.
+--      Better grouping for analysis: Standardized labels improve dashboards and category-based KPIs.
+
+
 
 
 -- -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -154,13 +186,14 @@ FROM layoffs_stagging2
 WHERE total_laid_off IS NULL
 AND percentage_laid_off IS NULL;
 
+-- Note: Identifying rows where both key layoff fields are NULL
 
 SELECT *  
 FROM layoffs_stagging2
 WHERE industry IS NULL
 OR industry = '';
 
--- Note: Im looking for Null and Blank spaces
+-- Note: Finding rows with missing or blank industry values
 
 
 SELECT * 
@@ -184,14 +217,15 @@ SET t2.industry = t3.industry
 WHERE t2.industry IS NULL 
 AND t3.industry IS NOT NULL;    
  
- -- Note : All Null spaces have now been updated with matching information 
+ -- Note : Filling missing industry values using self-join logic
+ -- Insight: Used self-joins to intelligently populate missing industry values. Removed rows that provided no meaningful data.
  
  
 UPDATE layoffs_stagging2
 SET industry = NULL 
 WHERE industry = ''; 
  
- -- Note: Im setting all the remaing industry blank spaces to null psaces 
+ -- Note: Converting empty strings in industry to NULL for consistency
  
  
  SELECT *
@@ -210,17 +244,43 @@ FROM layoffs_stagging2
 WHERE total_laid_off IS NULL
 AND percentage_laid_off IS NULL;
 
--- Note: Any remaining null spaces that i dont have data for is now deleted from the table 
+-- Note: Deleting rows with completely missing layoff data 
 
 
- SELECT * 
+-- SQL Logic Summary: Identified rows where key fields (total_laid_off, percentage_laid_off, industry) were null or blank.
+--       Used a self-join to fill missing industry data based on the company name.
+--       Removed rows with missing values that had no useful layoff information.
+--       Cleaned empty strings in the industry column by converting them to null for consistency.
+-- Insights for Stakeholders: Enhanced data quality: Critical gaps in the dataset were filled or removed to ensure integrity in business reporting.
+--       Intelligent data recovery: Missing values were replaced using related data instead of being discarded, minimizing information loss.
+--       Prepared for modeling & analytics: Clean dataset supports reliable analysis of layoff trends by industry, geography, and company.
+
+-- ---------------------------------------------------------------------------------------------
+
+-- Final Cleanup
+
+
+SELECT * 
 FROM layoffs_stagging2;
 
 ALTER TABLE layoffs_stagging2
 DROP COLUMN row_num;
 
--- Note: i deleted the `row_num` column  because their is no onger any duplicates
--- Insight: Drop column to drop the `row_num` i created for thr table 
+-- Note: Dropping the row_num column now that duplicates have been removed
+-- Insight: Cleaned up intermediate columns after completing deduplication.
+
+
+-- SQL Logic Summary: Removed the helper column row_num after deduplication was completed.
+
+-- Insights for Stakeholders: Lean dataset: Final table is optimized and free of technical helper columns, ready for visualization or further analysis.
+--        Professional-grade preprocessing: Ensures the dataset is suitable for stakeholder dashboards or predictive modeling.
+
+
+
+
+
+
+
 
 
 
