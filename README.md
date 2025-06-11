@@ -1,71 +1,64 @@
-# 🧼 SQL Data Cleaning Project – Layoffs Dataset
+# 🧹 SQL Data Cleaning Project: Layoff Records
 
-This project focuses on cleaning and preparing a real-world dataset on company layoffs for analysis using MySQL. The goal was to ensure the data is consistent, reliable, and analysis-ready by following key data cleaning steps.
-
-## 🗂️ Dataset Overview
-
-The dataset includes information about layoffs across various companies and industries, including:
-
-- Company name
-- Location
-- Industry
-- Total laid off
-- Percentage laid off
-- Date
-- Stage
-- Country
-- Funds raised
+## 📌 Project Overview
+This project focuses on cleaning and preparing a dataset of global company layoffs for accurate and reliable analysis. The raw data contained inconsistencies, duplicates, null values, and formatting issues that could mislead business insights. Using SQL, the dataset was cleaned and structured for analysis, reporting, and potential integration with business intelligence tools.
 
 ---
 
-## 🛠️ Cleaning Steps Performed
+## 📊 Dataset Description
+The original dataset includes layoff-related records with the following key columns:
 
-1. **Duplicate Removal**
-   - Identified and removed exact duplicates using `ROW_NUMBER()` and CTEs.
-
-2. **Data Standardization**
-   - Trimmed whitespace from text fields (e.g., company names).
-   - Normalized values for industry and country fields.
-   - Converted the `date` column from text to `DATE` format using `STR_TO_DATE()`.
-
-3. **Handling Missing Values**
-   - Detected and removed rows with completely missing layoff data.
-   - Used a self-join strategy to populate missing `industry` values based on known company matches.
-   - Replaced blank strings with `NULL` for clarity.
-
-4. **Column Cleanup**
-   - Removed intermediate columns like `row_num` once they were no longer needed.
+- **company**: Name of the company that performed layoffs
+- **location**: Geographic location of the company
+- **industry**: Industry sector of the company
+- **total_laid_off**: Number of employees laid off
+- **percentage_laid_off**: Proportion of workforce laid off
+- **date**: Reported date of the layoff event
+- **stage**: Company funding or business stage (e.g., Series A, Public)
+- **country**: Country of the company
+- **funds_raised_millions**: Total funds raised in millions
 
 ---
 
-## 📊 Tools Used
-
-- **Database:** MySQL
-- **Techniques:** CTEs, `ROW_NUMBER()`, string functions (`TRIM`, `LIKE`), date conversion, self joins.
-
----
-
-## ✅ Outcome
-
-A clean and consistent dataset is now ready for further analysis, visualization, or use in a BI tool.
+## ❓ Business Questions Addressed
+- Are there any duplicate records in the layoff data?
+- How consistent are the company, industry, and country fields?
+- Are there missing or incomplete values that need to be addressed?
+- Can missing industry fields be intelligently filled based on existing data?
+- How can the dataset be cleaned for time-series analysis?
 
 ---
 
-## 📁 Project Structure
-
-
----
-
-## 👤 Author
-
-- Akeira Green
-- [@akeiragreen](https://github.com/akeiragreen)
+## 🔍 Insights Summary
+- **Data Accuracy Improved**: Duplicates were removed using advanced SQL window functions, ensuring only valid and unique records remain.
+- **Consistent Labeling**: Inconsistent company, industry, and country names were standardized, making the dataset cleaner for segmentation.
+- **Missing Data Recovery**: Null values in the `industry` column were filled using self-joins based on company name, recovering valuable classification.
+- **Prepared for Time-Series Analysis**: Dates were converted from string format to proper SQL `DATE` type, enabling chronological trend analysis.
+- **Ready for Dashboards & Models**: Clean and standardized structure allows the dataset to be plugged into dashboards and predictive models with ease.
 
 ---
 
-## 🔍 Next Steps
+## 🛠️ Tools Used
+- **SQL**: MySQL Workbench
+- **Window Functions**: `ROW_NUMBER()` for duplicate detection
+- **String Functions**: `TRIM()`, `STR_TO_DATE()` for formatting cleanup
+- **Joins & CTEs**: Used for data recovery and filtering
 
-- Perform exploratory data analysis (EDA).
-- Load into Power BI or Tableau for visualization.
-- Integrate with time-series analysis for trend insights.
+---
+
+## 💼 Business Implications
+- **Reliable Reporting**: Clean data supports trustworthy insights for stakeholders evaluating industry-wide layoff trends.
+- **Operational Efficiency**: Removes data inconsistencies that could slow down reporting pipelines or introduce analytical errors.
+- **Enhanced Strategy**: Improved dataset allows teams to drill down into layoff patterns by country, company stage, or funding levels—supporting HR, finance, or investor decisions.
+
+---
+
+## 👤 Author & Contact
+**Author**: Akeira Green  
+**LinkedIn**: www.linkedin.com/in/akeira-green
+
+---
+
+## ✅ Status
+✅ Completed – Dataset is cleaned and ready for analysis or visualization tools like Tableau or Power BI.
 
