@@ -1,64 +1,92 @@
 # 🧹 SQL Data Cleaning Project: Layoff Records
 
+## 🦋 Butterfly Effect Format: Small Fixes, Big Impact
+
+Cleaning a messy dataset may seem like a minor backend task — but behind every reliable dashboard, trendline, or executive report lies structured, trusted data. This project showcases how a series of precise SQL transformations can transform chaotic layoff records into a foundation for strategic business insight.
+
+---
+
 ## 📌 Project Overview
-This project focuses on cleaning and preparing a dataset of global company layoffs for accurate and reliable analysis. The raw data contained inconsistencies, duplicates, null values, and formatting issues that could mislead business insights. Using SQL, the dataset was cleaned and structured for analysis, reporting, and potential integration with business intelligence tools.
+
+This SQL project cleans and prepares a global dataset of company layoffs for accurate analysis. The original dataset was riddled with duplicates, nulls, inconsistent labels, and poorly formatted values — all of which could distort downstream insights. Using MySQL, the data was refined to support time-series analysis, reporting automation, and integration into BI tools.
 
 ---
 
 ## 📊 Dataset Description
-The original dataset includes layoff-related records with the following key columns:
 
-- **company**: Name of the company that performed layoffs
-- **location**: Geographic location of the company
-- **industry**: Industry sector of the company
-- **total_laid_off**: Number of employees laid off
-- **percentage_laid_off**: Proportion of workforce laid off
-- **date**: Reported date of the layoff event
-- **stage**: Company funding or business stage (e.g., Series A, Public)
-- **country**: Country of the company
-- **funds_raised_millions**: Total funds raised in millions
+Key columns included in the raw dataset:
+
+- `company`: Name of the company executing layoffs  
+- `location`: City or region of the company  
+- `industry`: Sector the company operates in  
+- `total_laid_off`: Number of employees laid off  
+- `percentage_laid_off`: Proportion of workforce laid off  
+- `date`: Reported date of layoff  
+- `stage`: Company’s business or funding stage (e.g., Series A, Public)  
+- `country`: Country of operations  
+- `funds_raised_millions`: Capital raised in millions  
 
 ---
 
 ## ❓ Business Questions Addressed
-- Are there any duplicate records in the layoff data?
-- How consistent are the company, industry, and country fields?
-- Are there missing or incomplete values that need to be addressed?
-- Can missing industry fields be intelligently filled based on existing data?
-- How can the dataset be cleaned for time-series analysis?
+
+- Are there duplicate records in the layoff data?
+- How consistent are values in the `company`, `industry`, and `country` fields?
+- Can missing or null fields (especially `industry`) be intelligently recovered?
+- Is the dataset structured for reliable time-series analysis?
+- Can the dataset now support BI tools like Tableau or Power BI?
 
 ---
 
 ## 🔍 Insights Summary
-- **Data Accuracy Improved**: Duplicates were removed using advanced SQL window functions, ensuring only valid and unique records remain.
-- **Consistent Labeling**: Inconsistent company, industry, and country names were standardized, making the dataset cleaner for segmentation.
-- **Missing Data Recovery**: Null values in the `industry` column were filled using self-joins based on company name, recovering valuable classification.
-- **Prepared for Time-Series Analysis**: Dates were converted from string format to proper SQL `DATE` type, enabling chronological trend analysis.
-- **Ready for Dashboards & Models**: Clean and standardized structure allows the dataset to be plugged into dashboards and predictive models with ease.
+
+- **Data Accuracy Improved**:  
+  Duplicates removed using `ROW_NUMBER()` in SQL window functions — ensuring one unique record per event.
+
+- **Label Consistency Restored**:  
+  Inconsistent entries in `company`, `industry`, and `country` were standardized for clarity and grouping.
+
+- **Missing Data Recovered**:  
+  `industry` nulls filled using self-joins on `company` names, restoring critical classification.
+
+- **Time-Series Ready**:  
+  Converted text-based dates to proper SQL `DATE` format, enabling chronological sorting and forecasting.
+
+- **Dashboard-Compatible**:  
+  Output is now structured for seamless plug-in to visualization tools or predictive modeling workflows.
 
 ---
 
-## 🛠️ Tools Used
-- **SQL**: MySQL Workbench
-- **Window Functions**: `ROW_NUMBER()` for duplicate detection
-- **String Functions**: `TRIM()`, `STR_TO_DATE()` for formatting cleanup
-- **Joins & CTEs**: Used for data recovery and filtering
+## 🛠️ Tools & Techniques Used
+
+- **SQL Platform**: MySQL Workbench  
+- **Window Functions**: `ROW_NUMBER()` for de-duplication  
+- **String Functions**: `TRIM()`, `STR_TO_DATE()` for formatting  
+- **Joins & CTEs**: To recover and enrich incomplete data  
 
 ---
 
 ## 💼 Business Implications
-- **Reliable Reporting**: Clean data supports trustworthy insights for stakeholders evaluating industry-wide layoff trends.
-- **Operational Efficiency**: Removes data inconsistencies that could slow down reporting pipelines or introduce analytical errors.
-- **Enhanced Strategy**: Improved dataset allows teams to drill down into layoff patterns by country, company stage, or funding levels—supporting HR, finance, or investor decisions.
+
+- **Trustworthy Reporting**:  
+  Clean dataset ensures confident decision-making in volatile job markets.
+
+- **Operational Efficiency**:  
+  Reduces rework and accelerates the data-to-insight pipeline for analysts.
+
+- **Strategic Planning**:  
+  Enables drill-down into trends by region, funding stage, or sector for HR, finance, and investor use cases.
 
 ---
 
 ## 👤 Author & Contact
+
 **Author**: Akeira Green  
-**LinkedIn**: www.linkedin.com/in/akeira-green
+**LinkedIn**: [www.linkedin.com/in/akeira-green](https://www.linkedin.com/in/akeira-green)
 
 ---
 
-## ✅ Status
-✅ Completed – Dataset is cleaned and ready for analysis or visualization tools like Tableau or Power BI.
+## ✅ Project Status
+
+**✅ Completed** – Dataset is cleaned, validated, and ready for use in analytics platforms like Tableau, Power BI, or SQL-driven dashboards.
 
