@@ -1,6 +1,6 @@
 # 🧹 SQL Data Cleaning Project: Layoff Records
 
-## 🦋 Butterfly Effect Format: Small Fixes, Big Impact
+## 🦋 Butterfly Effect : Small Fixes, Big Impact
 
 Cleaning a messy dataset may seem like a minor backend task — but behind every reliable dashboard, trendline, or executive report lies structured, trusted data. This project showcases how a series of precise SQL transformations can transform chaotic layoff records into a foundation for strategic business insight.
 
